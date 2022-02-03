@@ -8,6 +8,7 @@ app_name = 'apiDev'
 router = DefaultRouter()
 
 router.register('article', views.ArticleViewSet, basename="article")
+router.register('store', views.StoreViewSet, basename="store")
 
 urlpatterns = [
     path('viewset/', include(router.urls)),
