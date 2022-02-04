@@ -1,6 +1,24 @@
 from rest_framework import serializers
+from apiDev import models
 from apiDev.models import Article, Store, Product, Category, Customer, Order
+from django.contrib.auth.models import User
 
+
+
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+        extra_kwargs = {
+            "password":{"write_only":True},
+        }
+    
+    def create(self, validated_data):
+        username = validated_data.get('username')
+        password = validated_data.get('password')
+        user = User.objects.create(username=username, password=password)
+
+        return user
 
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:

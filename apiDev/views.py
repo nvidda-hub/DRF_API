@@ -1,19 +1,66 @@
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
-from rest_framework.parsers import JSONParser
 from apiDev.models import Article, Store, Product, Category, Customer, Order
-from apiDev.serializers import ArticleSerializer, StoreSerializer, ProductSerializer, CategorySerializer, CustomerSerializer, OrderSerializer
-from django.views.decorators.csrf import csrf_exempt
+from apiDev.serializers import ArticleSerializer, StoreSerializer, ProductSerializer, CategorySerializer, CustomerSerializer, OrderSerializer, RegisterSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework import generics, mixins
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import viewsets
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework import viewsets, status
+from knox.auth import AuthToken
 
 
+
+# user auth views
+@api_view(['POST'])
+def login_view(request):
+    serializer = AuthTokenSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    user = serializer.validated_data['user']
+
+    _, token = AuthToken.objects.create(user)
+
+    return Response({
+        'user_info':
+        {
+            'id':user.id, 
+            'username':user.username, 
+        }, 
+        'token':token
+    })
+
+
+@api_view(["GET"])
+def get_user_data(request):
+    user = request.user
+
+    if user.is_authenticated:
+        return Response({
+            'user_info':{
+                "id":"user.id",
+                "username":user.username,
+            },
+
+        })
+    
+    return Response({'error':'You are not authorize to access this end point'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+@api_view(['POST'])
+def register_user(request):
+    serializer = RegisterSerializer(data = request.data)
+    serializer.is_valid(raise_exception=True)
+
+    user = serializer.save()
+
+    _, token = AuthToken.objects.create(user)
+
+    return Response({
+                        'user_info':
+                        {
+                            'id':user.id, 
+                            'username':user.username, 
+                        }, 
+                        'token':token
+                    })
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
