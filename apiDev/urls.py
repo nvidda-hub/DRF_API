@@ -15,6 +15,7 @@ router.register('customer', views.CustomerViewSet, basename="customer")
 router.register('order', views.OrderViewSet, basename="order")
 
 urlpatterns = [
+    path('', router.get_api_root_view()),
     path('viewset/', include(router.urls)),
     path('viewset/<int:pk>/', include(router.urls)),
     path('user/login/', views.login_view),
