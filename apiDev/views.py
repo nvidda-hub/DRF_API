@@ -1,5 +1,5 @@
-from apiDev.models import Article, Store, Product, Category, Customer, Order
-from apiDev.serializers import ArticleSerializer, StoreSerializer, ProductSerializer, CategorySerializer, CustomerSerializer, OrderSerializer, RegisterSerializer
+from apiDev.models import Store, Product, Category, Customer, Order
+from apiDev.serializers import StoreSerializer, ProductSerializer, CategorySerializer, CustomerSerializer, OrderSerializer, RegisterSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.serializers import AuthTokenSerializer
@@ -62,10 +62,6 @@ def register_user(request):
                         'token':token
                     })
 
-
-class ArticleViewSet(viewsets.ModelViewSet):
-    serializer_class = ArticleSerializer
-    queryset = Article.objects.all()
     
 
 class StoreViewSet(viewsets.ModelViewSet):

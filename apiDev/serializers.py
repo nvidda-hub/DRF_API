@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from apiDev import models
-from apiDev.models import Article, Store, Product, Category, Customer, Order
+from apiDev.models import Store, Product, Category, Customer, Order
 from django.contrib.auth.models import User
 
 
@@ -20,10 +19,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return user
 
-class ArticleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Article
-        fields = '__all__'
 
 class StoreSerializer(serializers.ModelSerializer):
     class Meta:

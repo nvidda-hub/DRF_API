@@ -1,9 +1,7 @@
 from django.contrib import admin
-from apiDev.models import Article, Store, Product, Category, Customer, Order
+from apiDev.models import Store, Product, Category, Customer, Order
 
 
-
-admin.site.register(Article)
 
 @admin.register(Store)
 class StoreModelAdmin(admin.ModelAdmin):
