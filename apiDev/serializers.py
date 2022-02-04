@@ -23,13 +23,15 @@ class RegisterSerializer(serializers.ModelSerializer):
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
-        # fields = ['id', 'title', 'author']
         fields = '__all__'
 
 class StoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Store
-        fields = ['id', 'store_link']
+        fields = ['id', 'store_name', 'address', 'store_link']
+        extra_kwargs = {
+            'store_link': {'read_only': True},
+        }
 
 class ProductSerializer(serializers.ModelSerializer):
     category = serializers.CharField()
