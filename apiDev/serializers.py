@@ -23,7 +23,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 class StoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Store
-        fields = ['id', 'store_name', 'address', 'store_link']
+        fields = ['id', 'store_name', 'address', 'store_link', 'owner']
         extra_kwargs = {
             'store_link': {'read_only': True},
         }
