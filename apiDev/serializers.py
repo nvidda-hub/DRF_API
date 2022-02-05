@@ -28,6 +28,7 @@ class StoreSerializer(serializers.ModelSerializer):
             'store_link': {'read_only': True},
         }
 
+
 class ProductSerializer(serializers.ModelSerializer):
     # category = serializers.CharField()
 
@@ -38,21 +39,18 @@ class ProductSerializer(serializers.ModelSerializer):
             'id': {'read_only': True},
         }
 
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep['store'] = StoreSerializer(instance.store).data
+        rep['category'] = CategorySerializer(instance.category).data
+        return rep
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'title']
 
 
-class GroupSerializer(serializers.ModelSerializer):
-    # category = serializers.CharField()
-
-    class Meta:
-        model = Product
-        fields = ['id', 'category']
-        extra_kwargs = {
-            'id': {'read_only': True},
-        }
 
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -65,4 +63,9 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['id', 'ordered_at', 'product', 'customer']
-        
+    
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        rep['store'] = ProductSerializer(instance.product).data
+        rep['customer'] = CustomerSerializer(instance.customer).data
+        return rep
