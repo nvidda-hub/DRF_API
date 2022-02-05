@@ -1,32 +1,26 @@
-from django.shortcuts import render 
-from django.http import HttpResponse, JsonResponse 
-from rest_framework.parsers import JSONParser 
-from django.views.decorators.csrf import csrf_exempt 
-from rest_framework.decorators import api_view 
 from rest_framework.response import Response 
-from rest_framework import status 
 from rest_framework.views import APIView 
-from rest_framework import generics, mixins 
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication, BasicAuthentication 
-from rest_framework.permissions import IsAuthenticated 
-from rest_framework import viewsets 
-from apiDev.models import Store
-from Buyer.buyer_serializers import StoreSerializer
+from apiDev.models import Store, Product
+from Buyer.buyer_serializers import ProductCatalogSerializer, StoreDetailSerializer
+from apiDev.serializers import ProductSerializer
 
 
 
 class StoreDetailView(APIView):     
     def get(self, request, link): 
-        store = list(Store.objects.all().filter(store_link=link).values())
-        store_serializer = StoreSerializer(store) 
-
+        store = list(Store.objects.filter(store_link=link).values())
+        store_serializer = StoreDetailSerializer(store) 
+        print(store[0]["store_name"])
         return Response(store)
 
 
 
-class ProductCatalogAndCategoryView(APIView):     
+class ProductCatalogAndCategoryView(APIView):
+    query_set = Product.objects.all()
+    serializer_class = ProductCatalogSerializer     
     def get(self, request, link): 
-        store = list(Store.objects.all().filter(store_link=link).values())
-        store_serializer = StoreSerializer(store) 
-
-        return Response(store)         
+        get_store = Store.objects.get(store_link=link)
+        print(f"\n\n get_store : {get_store} \n\n")
+        products = Product.objects.filter(store=get_store).values()
+        product_serializer = ProductCatalogSerializer(products) 
+        return Response(products)         

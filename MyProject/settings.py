@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'knox',
     'apiDev',
-    'Buyer'
+    'Buyer',
 ]
 
 MIDDLEWARE = [
