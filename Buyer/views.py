@@ -16,11 +16,8 @@ from Buyer.buyer_serializers import StoreSerializer
 
 
 class StoreDetailView(APIView):     
-    lookup_field = 'store_link'
-    def get(self, request): 
-        store = request.query_params
-        print(f"\n\n {store} \n\n")
+    def get(self, request, link): 
+        store = list(Store.objects.all().filter(store_link=link).values())
+        store_serializer = StoreSerializer(store) 
 
-        serializer = StoreSerializer(store) 
-
-        return Response(serializer.data)         
+        return Response(store)         
