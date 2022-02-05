@@ -50,6 +50,8 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id', 'title']
 
+    def display_value(self, instance):
+        return instance.title
 
 
 

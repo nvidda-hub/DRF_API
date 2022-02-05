@@ -5,7 +5,7 @@ from apiDev.models import Store, Product, Category, Customer, Order
 
 @admin.register(Store)
 class StoreModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'store_name', 'address', 'store_link']
+    list_display = ['id', 'store_name', 'address', 'store_link', 'owner']
 
 @admin.register(Product)
 class ProductModelAdmin(admin.ModelAdmin):
