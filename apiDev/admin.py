@@ -17,7 +17,7 @@ class CategoryModelAdmin(admin.ModelAdmin):
 
 @admin.register(Customer)
 class CustomerModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'customer_mobile_num', 'customer_name', 'customer_address']
+    list_display = ['id', 'customer_email', 'customer_name', 'customer_address']
 
 @admin.register(Order)
 class OrderModelAdmin(admin.ModelAdmin):

@@ -20,4 +20,13 @@ class StoreDetailView(APIView):
         store = list(Store.objects.all().filter(store_link=link).values())
         store_serializer = StoreSerializer(store) 
 
+        return Response(store)
+
+
+
+class ProductCatalogAndCategoryView(APIView):     
+    def get(self, request, link): 
+        store = list(Store.objects.all().filter(store_link=link).values())
+        store_serializer = StoreSerializer(store) 
+
         return Response(store)         

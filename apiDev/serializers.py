@@ -29,11 +29,11 @@ class StoreSerializer(serializers.ModelSerializer):
         }
 
 class ProductSerializer(serializers.ModelSerializer):
-    category = serializers.CharField()
+    # category = serializers.CharField()
 
     class Meta:
         model = Product
-        fields = ['id', 'product_name', 'description', 'MRP', 'sale_price', 'category']
+        fields = ['id', 'product_name', 'description', 'MRP', 'sale_price', 'category', 'store']
         extra_kwargs = {
             'id': {'read_only': True},
         }
@@ -45,7 +45,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
-    category = serializers.CharField()
+    # category = serializers.CharField()
 
     class Meta:
         model = Product
@@ -58,7 +58,7 @@ class GroupSerializer(serializers.ModelSerializer):
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ['id', 'customer_mobile_num', 'customer_address']
+        fields = ['id', 'customer_email', 'customer_address']
 
 
 class OrderSerializer(serializers.ModelSerializer):

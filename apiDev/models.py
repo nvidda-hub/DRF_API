@@ -5,6 +5,14 @@ import random, string
 from django.contrib.auth.models import User
 
 
+
+
+def pre_save_store_receiver(sender, instance, *args, **kwargs):
+    if not instance.store_link:
+        instance.store_link = slugify(random_link_generator() + "-" + instance.store_name)
+
+
+
 def upload_location(instance, filename):
     file_path = 'store/{owner_id}/{store}-{filename}'.format(
                 owner_id=str(instance.store.owner.id),store=str(instance.store), filename=filename)
@@ -23,16 +31,17 @@ class Category(models.Model):
         verbose_name_plural = 'Categories'
 
     def _str_(self):
-        return f"{self.title} New Category added."
+        return self.title
 
 class Store(models.Model):
     store_name = models.CharField(max_length=50, null=False, blank=False)
     address = models.TextField(max_length=5000, null=False, blank=False)
     store_link = models.SlugField(blank=True, unique=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-def pre_save_store_receiver(sender, instance, *args, **kwargs):
-    if not instance.store_link:
-        instance.store_link = slugify(random_link_generator() + "-" + instance.store_name)
+    
+    def __str__(self):
+        return self.store_name
+
 
 pre_save.connect(pre_save_store_receiver, sender=Store)
 
@@ -49,16 +58,21 @@ class Product(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.product_name} added to {self.store}"
+        return self.product_name
 
 
 class Customer(models.Model):
-    customer_mobile_num  = models.CharField(max_length=17, unique=True)
+    customer_email  = models.EmailField(max_length=17, unique=True)
     customer_name = models.CharField(max_length=50, blank=True)
     customer_address = models.TextField(max_length=5000, null=False, blank=False)
 
+    def __str__(self):
+        return self.customer_name
 
 class Order(models.Model):
     ordered_at = models.DateTimeField(auto_now_add=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.customer
