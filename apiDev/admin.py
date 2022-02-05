@@ -8,8 +8,8 @@ class StoreModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'store_name', 'address', 'store_link']
 
 @admin.register(Product)
-class StoreModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'product_name']
+class ProductModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'product_name', 'description', 'MRP', 'sale_price', 'category', 'store', 'image']
 
 @admin.register(Category)
 class CategoryModelAdmin(admin.ModelAdmin):
