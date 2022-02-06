@@ -41,7 +41,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        rep['store_name'] = StoreSerializer(instance.store).data
+        rep['store_name'] = StoreSerializer(instance.store_name).data
         rep['category'] = CategorySerializer(instance.category).data
         return rep
 

@@ -14,8 +14,9 @@ def pre_save_store_receiver(sender, instance, *args, **kwargs):
 
 
 def upload_location(instance, filename):
-    file_path = 'store/{owner_id}/{store_name}-{filename}'.format(
-                owner_id=str(instance.store.owner.id),store_name=str(instance.store), filename=filename)
+    print("\n\n instance.store_name : ", instance.store_name, "\n\n")
+    print("\n\n instance.store_name.owner : ", instance.store_name.owner, "\n\n")
+    file_path = f'store/{str(instance.store_name.owner)}/{str(instance.store_name)}-{filename}'
     return file_path
 
 def random_link_generator():
