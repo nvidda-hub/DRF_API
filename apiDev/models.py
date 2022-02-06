@@ -14,14 +14,14 @@ def pre_save_store_receiver(sender, instance, *args, **kwargs):
 
 
 def upload_location(instance, filename):
-    file_path = 'store/{owner_id}/{store}-{filename}'.format(
-                owner_id=str(instance.store.owner.id),store=str(instance.store), filename=filename)
+    file_path = 'store/{owner_id}/{store_name}-{filename}'.format(
+                owner_id=str(instance.store.owner.id),store_name=str(instance.store), filename=filename)
     return file_path
 
 def random_link_generator():
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(6))
 
-# Create your models here.
+
 
 
 class Category(models.Model):
@@ -53,9 +53,10 @@ class Product(models.Model):
     description = models.TextField(max_length=5000, null=False, blank=False)
     MRP = models.IntegerField()
     sale_price = models.IntegerField()
+    qty = models.IntegerField()
     image = models.ImageField(upload_to=upload_location, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    store_name = models.ForeignKey(Store, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.product_name

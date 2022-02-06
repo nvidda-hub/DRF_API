@@ -34,14 +34,14 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['id', 'product_name', 'description', 'MRP', 'sale_price', 'category', 'store', 'image']
+        fields = ['id', 'product_name', 'description', 'MRP', 'sale_price', 'category', 'qty', 'store_name', 'image']
         extra_kwargs = {
             'id': {'read_only': True},
         }
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        rep['store'] = StoreSerializer(instance.store).data
+        rep['store_name'] = StoreSerializer(instance.store).data
         rep['category'] = CategorySerializer(instance.category).data
         return rep
 
@@ -68,6 +68,6 @@ class OrderSerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        rep['store'] = ProductSerializer(instance.product).data
+        rep['store_name'] = ProductSerializer(instance.product).data
         rep['customer'] = CustomerSerializer(instance.customer).data
         return rep
