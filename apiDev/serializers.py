@@ -55,10 +55,23 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 
+
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ['id', 'customer_email', 'customer_address']
+        fields = ['customer_name', 'customer_email','customer_address',]
+
+    def save(self):
+        account = Customer(
+            customer_name=self.validated_data['customer_name'],
+            customer_email=self.validated_data['customer_email'],
+            customer_address=self.validated_data['customer_address'],
+        )
+        # password = self.validated_data['password']
+
+        # account.set_password(password)
+        account.save()
+        return account
 
 
 class OrderSerializer(serializers.ModelSerializer):
