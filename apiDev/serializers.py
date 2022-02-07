@@ -1,23 +1,23 @@
 from rest_framework import serializers
 from apiDev.models import Store, Product, Category, Customer, Order
-from django.contrib.auth.models import User
+from apiDev.models import Account
 
 
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ['id', 'username', 'password']
-        extra_kwargs = {
-            "password":{"write_only":True},
-        }
-    
-    def create(self, validated_data):
-        username = validated_data.get('username')
-        password = validated_data.get('password')
-        user = User.objects.create(username=username, password=password)
+        model = Account
+        fields = ['username', 'password']
 
-        return user
+    def save(self):
+        account = Account(
+            username=self.validated_data['username']
+        )
+        password = self.validated_data['password']
+
+        account.set_password(password)
+        account.save()
+        return account
 
 
 class StoreSerializer(serializers.ModelSerializer):

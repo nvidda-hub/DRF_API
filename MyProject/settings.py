@@ -29,7 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-
+AUTH_USER_MODEL = 'apiDev.Account'
 
 
 # Application definition
@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'apiDev',
     'Buyer',
     'corsheaders',
+    'rest_framework.authtoken',
+
 ]
 
 MIDDLEWARE = [
@@ -150,5 +152,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES':('knox.auth.TokenAuthentication',)
+    'DEFAULT_AUTHENTICATION_CLASSES':['rest_framework.authentication.TokenAuthentication','knox.auth.TokenAuthentication',]
 }

@@ -1,7 +1,11 @@
 from django.contrib import admin
-from apiDev.models import Store, Product, Category, Customer, Order
+from apiDev.models import Store, Product, Category, Customer, Order, Account
 
 
+
+@admin.register(Account)
+class AccountModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'username', 'first_name', 'date_joined', 'is_staff', 'is_active']
 
 @admin.register(Store)
 class StoreModelAdmin(admin.ModelAdmin):

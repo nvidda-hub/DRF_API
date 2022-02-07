@@ -2,7 +2,13 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
 import random, string
-from django.contrib.auth.models import User
+from django.db import models
+from apiDev.managers import MyAccountManager
+from django.contrib.auth.models import AbstractBaseUser
+
+from django.conf import settings
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
 
 
 
@@ -23,6 +29,37 @@ def random_link_generator():
     return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(6))
 
 
+# Create your models here.
+
+
+class Account(AbstractBaseUser):
+    username  = models.CharField(max_length=17, unique=True)
+    first_name  = models.CharField(max_length=30, blank=True)
+    last_name   = models.CharField(max_length=30, blank=True)
+    date_joined	= models.DateTimeField(verbose_name='date joined', auto_now_add=True)
+    last_login	= models.DateTimeField(verbose_name='last login', auto_now=True)
+    is_admin	= models.BooleanField(default=False)
+    is_active	= models.BooleanField(default=True)
+    is_staff	= models.BooleanField(default=False)
+    is_superuser= models.BooleanField(default=False)
+
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = []
+
+    objects = MyAccountManager()
+
+    def __str__(self):
+        return self.username
+
+    def has_perm(self, perm, obj=None):
+        return self.is_admin
+
+    def has_module_perms(self, app_label):
+        return True
+
+
+
 
 
 class Category(models.Model):
@@ -38,7 +75,7 @@ class Store(models.Model):
     store_name = models.CharField(max_length=50, null=False, blank=False)
     address = models.TextField(max_length=5000, null=False, blank=False)
     store_link = models.SlugField(blank=True, unique=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.store_name
@@ -68,8 +105,20 @@ class Customer(models.Model):
     customer_name = models.CharField(max_length=50, blank=True)
     customer_address = models.TextField(max_length=5000, null=False, blank=False)
 
+    USERNAME_FIELD = 'customer_email'
+    REQUIRED_FIELDS = []
+
+    objects = MyAccountManager()
+
     def __str__(self):
-        return self.customer_name
+        return self.customer_email
+
+    def has_perm(self, perm, obj=None):
+        return self.is_admin
+
+    def has_module_perms(self, app_label):
+        return True
+
 
 class Order(models.Model):
     ordered_at = models.DateTimeField(auto_now_add=True)
