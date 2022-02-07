@@ -1,8 +1,12 @@
 from rest_framework.response import Response 
 from rest_framework.views import APIView 
 from apiDev.models import Store, Product
-from Buyer.buyer_serializers import ProductCatalogSerializer, StoreDetailSerializer
+from Buyer.models import Cart
+from Buyer.buyer_serializers import CartSerializers, ProductCatalogSerializer, StoreDetailSerializer
 from apiDev.serializers import ProductSerializer
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+
 
 
 
@@ -22,3 +26,15 @@ class ProductCatalogAndCategoryView(APIView):
         products = Product.objects.filter(store_name=get_store).values()
         product_serializer = ProductCatalogSerializer(products) 
         return Response(products)         
+
+
+class ListCartView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializers     
+
+
+class CartDetialView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializers     
