@@ -19,7 +19,7 @@ urlpatterns = [
     path('viewset/', include(router.urls)),
     path('viewset/<int:pk>/', include(router.urls)),
     path('user/login/', views.login_view),
-    path('register/', views.signup_view),
+    path('register/', views.register_user),
     path('getuser/', views.get_user_data),
     path('logout/', knox_views.LogoutView.as_view()),
     path('logoutall/', knox_views.LogoutAllView.as_view()),

@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework import viewsets, status
 from knox.auth import AuthToken
-from rest_framework.authtoken.models import Token
 
 
 
@@ -45,36 +44,23 @@ def get_user_data(request):
 
 
 
-# @api_view(['POST'])
-# def register_user(request):
-#     serializer = RegisterSerializer(data = request.data)
-#     serializer.is_valid(raise_exception=True)
-
-#     user = serializer.save()
-
-#     _, token = AuthToken.objects.create(user)
-
-#     return Response({
-#                         'user_info':
-#                         {
-#                             'id':user.id, 
-#                             'username':user.username, 
-#                         }, 
-#                         'token':token
-#                     })
-
 @api_view(['POST'])
-def signup_view(request):
+def register_user(request):
+    serializer = RegisterSerializer(data = request.data)
+    serializer.is_valid(raise_exception=True)
 
-    serializer = RegisterSerializer(data=request.data)
-    data = {}
-    if serializer.is_valid():
-        account = serializer.save()
-        data['response'] = "successfully registered a new user."
-        data['username'] = account.username
-    else:
-        data = serializer.errors
-    return Response(data)
+    user = serializer.save()
+
+    _, token = AuthToken.objects.create(user)
+
+    return Response({
+                        'user_info':
+                        {
+                            'id':user.id, 
+                            'username':user.username, 
+                        }, 
+                        'token':token
+                    })
 
 
 class StoreViewSet(viewsets.ModelViewSet):
@@ -85,6 +71,7 @@ class StoreViewSet(viewsets.ModelViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
+
     
 
 class CategoryViewSet(viewsets.ModelViewSet):

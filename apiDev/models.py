@@ -60,17 +60,6 @@ class Account(AbstractBaseUser):
 
 
 
-
-
-class Category(models.Model):
-    title = models.CharField(max_length=255)
-
-    class Meta:
-        verbose_name_plural = 'Categories'
-
-    def _str_(self):
-        return self.title
-
 class Store(models.Model):
     store_name = models.CharField(max_length=50, null=False, blank=False)
     address = models.TextField(max_length=5000, null=False, blank=False)
@@ -84,6 +73,17 @@ class Store(models.Model):
 pre_save.connect(pre_save_store_receiver, sender=Store)
 
 
+class Category(models.Model):
+    title = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name_plural = 'Categories'
+
+    def __str__(self):
+        return self.title
+
+
+
 
 
 class Product(models.Model):
@@ -93,15 +93,15 @@ class Product(models.Model):
     sale_price = models.IntegerField()
     qty = models.IntegerField()
     image = models.ImageField(upload_to=upload_location, null=True, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     store_name = models.ForeignKey(Store, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.product_name
 
 
-class Customer(models.Model):
-    customer_email  = models.EmailField(max_length=17, unique=True)
+class Customer(AbstractBaseUser):
+    customer_email  = models.EmailField(max_length=30, unique=True)
     customer_name = models.CharField(max_length=50, blank=True)
     customer_address = models.TextField(max_length=5000, null=False, blank=False)
 

@@ -6,7 +6,7 @@ from django.contrib.auth.models import BaseUserManager
 class MyAccountManager(BaseUserManager):
     def create_user(self, username, password=None):
         if not username:
-            raise ValueError('Users must have an mobile_num')
+            raise ValueError('Users must have an username')
 
         user = self.model(
             username=username,

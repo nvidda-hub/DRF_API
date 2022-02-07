@@ -8,6 +8,9 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ['username', 'password']
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
 
     def save(self):
         account = Account(
@@ -30,8 +33,6 @@ class StoreSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    # category = serializers.CharField()
-
     class Meta:
         model = Product
         fields = ['id', 'product_name', 'description', 'MRP', 'sale_price', 'category', 'qty', 'store_name', 'image']
@@ -50,28 +51,29 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id', 'title']
 
-    def display_value(self, instance):
-        return instance.title
-
-
 
 
 class CustomerSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(max_length=30, min_length=8)
     class Meta:
         model = Customer
-        fields = ['customer_name', 'customer_email','customer_address',]
+        fields = ['customer_name', 'customer_email','customer_address','password']
+        extra_kwargs = {
+            'password': {'read_only': True},
+        }
 
     def save(self):
-        account = Customer(
+        customer_account = Customer(
             customer_name=self.validated_data['customer_name'],
             customer_email=self.validated_data['customer_email'],
             customer_address=self.validated_data['customer_address'],
         )
-        # password = self.validated_data['password']
+        password = self.validated_data['password']
 
-        # account.set_password(password)
-        account.save()
-        return account
+        customer_account.set_password(password)
+        customer_account.save()
+        customer_account.is_staff = False
+        return customer_account
 
 
 class OrderSerializer(serializers.ModelSerializer):
