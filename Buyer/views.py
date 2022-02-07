@@ -29,12 +29,12 @@ class ProductCatalogAndCategoryView(APIView):
 
 
 class ListCartView(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     queryset = Cart.objects.all()
     serializer_class = CartSerializers     
 
 
 class CartDetialView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     queryset = Cart.objects.all()
     serializer_class = CartSerializers     
