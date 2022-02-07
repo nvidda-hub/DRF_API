@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from apiDev.models import Store, Product, Category, Customer, Order
 from Buyer.models import Cart
-from apiDev.serializers import ProductSerializer, StoreSerializer
+from apiDev.serializers import CustomerSerializer, ProductSerializer, StoreSerializer
 
 
 
@@ -17,6 +17,7 @@ class ProductCatalogSerializer(serializers.ModelSerializer):
 
 
 class CartSerializers(serializers.ModelSerializer):
+    cart_id = CustomerSerializer(read_only=True, many=False)
     products = ProductSerializer(read_only=True, many=True)
     store = StoreSerializer(read_only=True, many=True)
     class Meta:
